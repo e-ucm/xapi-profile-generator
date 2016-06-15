@@ -1,0 +1,32 @@
+{
+    "name" : "e-ucm/xapi-profile2html",
+    "version" : "0.1.0",
+    "description": "HTML generator for xAPI JSON-LD profiles",
+    "keywords": ["xapi","profile", "generator"],
+    "homepage": "https://github.com/e-ucm/xapi-profile2html",
+    "license": "Apache 2",
+    "authors": [
+        {
+            "name": "Ivan Martinez-Ortiz",
+            "homepage": "https://github.com/imartinezortiz/",
+            "role": "Developer"
+        },
+        {
+            "name": "Angel Serrano-Laguna",
+            "homepage": "https://github.com/anserran/",
+            "role": "Developer"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/e-ucm/xapi-profile2html"
+        }
+    ],
+    "require": {
+        "php" : ">=5.3.0"
+    },
+    "autoload": {
+        "psr-4": {"es\\eucm\\xapi\\": "src/"}
+    }
+}
