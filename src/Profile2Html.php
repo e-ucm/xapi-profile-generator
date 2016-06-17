@@ -50,9 +50,9 @@ class Profile2Html
         $created = $profile['created']['en'];
         $modified = $profile['modified']['en'];
 
-        usort($verbs, array('\\es\\eucm\\xapi\\ProfileGenerator', 'sortByLabel'));
-        usort($activities, array('\\es\\eucm\\xapi\\ProfileGenerator', 'sortByLabel'));
-        usort($extensions, array('\\es\\eucm\\xapi\\ProfileGenerator', 'sortByLabel'));
+        usort($verbs, array('\\es\\eucm\\xapi\\Profile2Html', 'sortByLabel'));
+        usort($activities, array('\\es\\eucm\\xapi\\Profile2Html', 'sortByLabel'));
+        usort($extensions, array('\\es\\eucm\\xapi\\Profile2Html', 'sortByLabel'));
 
         return $this->generatePage($url, $title, $created, $modified, $verbs, $activities, $extensions);
     }
