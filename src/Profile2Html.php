@@ -83,49 +83,15 @@ EOT;
         $tableBody = '';
         foreach ($terms as $term) {
             $id = isset($term['@id']) ? $term['@id'] : '';
-            $anchorId = '';
-            if (strpos($id, $url) === false) {
+            $isTermReused = strpos($id, $url) === false;
+            if (!$isTermReused) {
+                $anchorId = substr($id, strlen($url)+1);
+                $tableBody .= $this->generateRowForOurTerm($term, $url, $type, $anchorId);
+            } else {
                 $idUrl = parse_url($id);
                 $anchorId= $idUrl['host'].$idUrl['path'];
-            } else {
-                $anchorId = substr($id, strlen($url)+1);
+                $tableBody .= $this->generateRowForReusedTerm($term, $url, $anchorId);
             }
-            $prefLabel = isset($term['prefLabel']) ? $term['prefLabel']['en'] : '';
-            $description = isset($term['definition']) ? $term['definition']['en'] : '';
-            $scope_note = isset($term['scopeNote']) ? $term['scopeNote']['en'] : '';
-            $close_match = isset($term['closeMatch']) ? $term['closeMatch']['@id'] : '';
-            $close_match_content = '';
-            if ($close_match) {
-                $close_match_content = "<strong>closeMatch:</strong> <a href=\"{$close_match}\" target=\"_blank\">$close_match</a>";
-            }
-            $related_term = isset($term['closelyRelatedNaturalLanguageTerm']) ? $term['closelyRelatedNaturalLanguageTerm']['@id'] : '';
-            $tr_class = isset($term['reference']) && $term['reference'] ? 'warning' : '';
-            $in_scheme = isset($term['inScheme']) ? $term['inScheme'] : $url;
-
-	        $tableBodyRow = <<<EOT
-            <tbody typeof="xapi:i{$type}" about="{$id}" id="{$anchorId}">
-            <tr class="{$tr_class}">
-                <td property="skos:prefLabel" lang="en" xml:lang="en" content="{$prefLabel}">{$prefLabel}</td>
-                <td property="skos:definition" lang="en" xml:lang="en" content="{$description}">
-                    {$description}
-                </td>
-                <td property="skos:scopeNote" lang="en" xml:lang="en" content="{$scope_note}">
-                    {$scope_note}
-                </td>
-                <td><a href="{$id}">{$id}</a>
-                </td>
-                <td rel="skos:closeMatch" resource="{$close_match}">
-                    {$close_match_content}
-                </td>
-                <td rel="xapi:closelyRelatedNaturalLanguageTerm" resource="{$related_term}">
-                    <a href="{$related_term}" target="_blank">{$related_term}</a>
-                </td>
-                <td rel="skos:inScheme" resource="{$in_scheme}">
-                    <a href="{$in_scheme}">{$in_scheme}</a></td>
-            </tr>
-            </tbody>
-EOT;
-            $tableBody .= $tableBodyRow;
         }
 
         $tableFooter=<<<EOT
@@ -133,6 +99,73 @@ EOT;
         </div>
 EOT;
         return $tableHeader.$tableBody.$tableFooter;
+    }
+
+    private function generateRowForOurTerm($term, $url, $type, $anchorId)
+    {
+        $id = isset($term['@id']) ? $term['@id'] : '';
+        $prefLabel = isset($term['prefLabel']) ? $term['prefLabel']['en'] : '';
+        $description = isset($term['definition']) ? $term['definition']['en'] : '';
+        $scope_note = isset($term['scopeNote']) ? $term['scopeNote']['en'] : '';
+        $close_match = isset($term['closeMatch']) ? $term['closeMatch']['@id'] : '';
+        $close_match_content = '';
+        if ($close_match) {
+            $close_match_content = "<strong>closeMatch:</strong> <a href=\"{$close_match}\" target=\"_blank\">$close_match</a>";
+        }
+        $related_term = isset($term['closelyRelatedNaturalLanguageTerm']) ? $term['closelyRelatedNaturalLanguageTerm']['@id'] : '';
+        $tr_class = isset($term['reference']) && $term['reference'] ? 'warning' : '';
+
+        $tableBodyRow = <<<EOT
+        <tbody typeof="xapi:i{$type}" about="{$id}" id="{$anchorId}">
+            <tr class="{$tr_class}">
+            <td property="skos:prefLabel" lang="en" xml:lang="en" content="{$prefLabel}">{$prefLabel}</td>
+            <td property="skos:definition" lang="en" xml:lang="en" content="{$description}">
+                {$description}
+            </td>
+            <td property="skos:scopeNote" lang="en" xml:lang="en" content="{$scope_note}">
+                {$scope_note}
+            </td>
+            <td><a href="{$id}">{$id}</a>
+            </td>
+            <td rel="skos:closeMatch" resource="{$close_match}">
+                {$close_match_content}
+            </td>
+            <td rel="xapi:closelyRelatedNaturalLanguageTerm" resource="{$related_term}">
+                <a href="{$related_term}" target="_blank">{$related_term}</a>
+            </td>
+            <td rel="skos:inScheme" resource="{$url}">
+                <a href="{$url}">{$url}</a></td>
+            </tr>
+        </tbody>
+EOT;
+        return $tableBodyRow;
+    }
+
+    private function generateRowForReusedTerm($term, $url, $anchorId)
+    {
+        $id = isset($term['@id']) ? $term['@id'] : '';
+        $prefLabel = isset($term['prefLabel']) ? $term['prefLabel']['en'] : '';
+        $scope_note = isset($term['scopeNote']) ? $term['scopeNote']['en'] : '';
+        $tr_class = isset($term['reference']) && $term['reference'] ? 'warning' : '';
+        $vocabularyIRI = isset($term['inScheme']) ? $term['inScheme'] : '';
+        $tableBodyRow = <<<EOT
+        <tbody resource="{$id}" id="{$anchorId}">
+            <tr class="{$tr_class}">
+            <td>{$prefLabel}</td>
+            <td> </td>
+            <td property="skos:scopeNote" lang="en" xml:lang="en" content="{$scope_note}">
+                {$scope_note}
+            </td>
+            <td><a href="{$id}">{$id}</a>
+            </td>
+            <td> </td>
+            <td> </td>
+            <td rel="skos:referencedBy" resource="{$url}">
+                <a href="{$vocabularyIRI}">{$vocabularyIRI}</a></td>
+            </tr>
+        </tbody>
+EOT;
+        return $tableBodyRow;
     }
 
     private function generateDropdown($terms, $url, $title)
