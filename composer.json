@@ -1,6 +1,6 @@
 {
     "name" : "e-ucm/xapi-profile2html",
-    "version" : "0.1.0",
+    "version" : "0.1.1",
     "description": "HTML generator for xAPI JSON-LD profiles",
     "keywords": ["xapi","profile", "generator"],
     "homepage": "https://github.com/e-ucm/xapi-profile2html",
