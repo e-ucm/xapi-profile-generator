@@ -5,17 +5,14 @@ namespace es\eucm\xapi;
 class Profile2Html
 {
 
-    private $profilePath;
-
-    public function __construct($profilePath)
+    public function __construct()
     {
-        $this->profilePath = $profilePath;
     }
 
-    public function generate()
+    public function generate($profilePath)
     {
 
-        $json_ld = file_get_contents($this->profilePath);
+        $json_ld = file_get_contents($profilePath);
         $profile = json_decode($json_ld, true);
 
         $title = $profile['prefLabel']['en'];
