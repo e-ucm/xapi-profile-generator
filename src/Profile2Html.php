@@ -118,23 +118,39 @@ EOT;
         $tableBodyRow = <<<EOT
         <tbody typeof="xapi:i{$type}" about="{$id}" id="{$anchorId}">
             <tr class="{$tr_class}">
-            <td property="skos:prefLabel" lang="en" xml:lang="en" content="{$prefLabel}">{$prefLabel}</td>
-            <td property="skos:definition" lang="en" xml:lang="en" content="{$description}">
-                {$description}
-            </td>
-            <td property="skos:scopeNote" lang="en" xml:lang="en" content="{$scope_note}">
-                {$scope_note}
-            </td>
-            <td><a href="{$id}">{$id}</a>
-            </td>
-            <td rel="skos:closeMatch" resource="{$close_match}">
-                {$close_match_content}
-            </td>
-            <td rel="xapi:closelyRelatedNaturalLanguageTerm" resource="{$related_term}">
-                <a href="{$related_term}" target="_blank">{$related_term}</a>
-            </td>
+EOT;
+        if (strlen($prefLabel) > 0) {
+            $tableBodyRow .= "<td property=\"skos:prefLabel\" lang=\"en\" xml:lang=\"en\" content=\"{$prefLabel}\">{$prefLabel}</td>";
+        } else {
+            $tableBodyRow .= "<td></td>";
+        }
+        if (strlen($description) > 0) {
+            $tableBodyRow .= "<td property=\"skos:definition\" lang=\"en\" xml:lang=\"en\" content=\"{$description}\">{$description}</td>";
+        } else {
+            $tableBodyRow .= "<td></td>";
+        }
+        if (strlen($scope_note) > 0) {
+            $tableBodyRow .= "<td property=\"skos:scopeNote\" lang=\"en\" xml:lang=\"en\" content=\"{$scope_note}\">{$scope_note}</td>";
+        } else {
+            $tableBodyRow .= "<td></td>";
+        }
+
+        $tableBodyRow .= "<td><a href=\"{$id}\">{$id}</a></td>";
+        if (strlen($close_match) > 0) {
+            $tableBodyRow .= "<td rel=\"skos:closeMatch\" resource=\"{$close_match}\">{$close_match_content}</td>";
+        } else {
+            $tableBodyRow .= "<td></td>";
+        }
+        if (strlen($related_term) > 0) {
+            $tableBodyRow .= "<td rel=\"skos:closelyRelatedNaturalLanguageTerm\" resource=\"{$related_term}\"><a href=\"{$related_term}\" target=\"_blank\">{$related_term}</a></td>";
+        } else {
+            $tableBodyRow .= "<td></td>";
+        }
+
+        $tableBodyRow .= <<<EOT
             <td rel="skos:inScheme" resource="{$url}">
-                <a href="{$url}">{$url}</a></td>
+                <a href="{$url}">{$url}</a>
+            </td>
             </tr>
         </tbody>
 EOT;
@@ -153,15 +169,26 @@ EOT;
             <tr class="{$tr_class}">
             <td>{$prefLabel}</td>
             <td> </td>
-            <td property="skos:scopeNote" lang="en" xml:lang="en" content="{$scope_note}">
-                {$scope_note}
-            </td>
-            <td><a href="{$id}">{$id}</a>
-            </td>
-            <td> </td>
-            <td> </td>
-            <td rel="skos:referencedBy" resource="{$url}">
-                <a href="{$vocabularyIRI}">{$vocabularyIRI}</a></td>
+EOT;
+        if (strlen($scope_note) > 0) {
+            $tableBodyRow .= "<td property=\"skos:scopeNote\" lang=\"en\" xml:lang=\"en\" content=\"{$scope_note}\">{$scope_note}</td>";
+        } else {
+            $tableBodyRow .= "<td></td>";
+        }
+        $tableBodyRow .= "<td><a href=\"{$id}\">{$id}</a></td>";
+        $tableBodyRow .= "<td> </td><td> </td>";
+        if (strlen($scope_note) > 0) {
+            $tableBodyRow .= "<td property=\"skos:scopeNote\" lang=\"en\" xml:lang=\"en\" content=\"{$scope_note}\">{$scope_note}</td>";
+        } else {
+            $tableBodyRow .= "<td></td>";
+        }
+        if (strlen($vocabularyIRI) > 0) {
+            $tableBodyRow .= "<td rel=\"skos:referencedBy\" resource=\"{$url}\"><a href=\"{$vocabularyIRI}\">{$vocabularyIRI}</a></td>";
+        } else {
+            $tableBodyRow .= "<td></td>";
+        }
+
+        $tableBodyRow .= <<<EOT
             </tr>
         </tbody>
 EOT;
