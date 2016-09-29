@@ -116,37 +116,49 @@ EOT;
         $tr_class = isset($term['reference']) && $term['reference'] ? 'warning' : '';
 
         $tableBodyRow = <<<EOT
-        <tbody typeof="xapi:i{$type}" about="{$id}" id="{$anchorId}">
+        <!-- {$type} -->
+        <tbody typeof="xapi:{$type}" about="{$id}" id="{$anchorId}">
             <tr class="{$tr_class}">
 EOT;
+        // Label
         if (strlen($prefLabel) > 0) {
             $tableBodyRow .= "<td property=\"skos:prefLabel\" lang=\"en\" xml:lang=\"en\" content=\"{$prefLabel}\">{$prefLabel}</td>";
         } else {
             $tableBodyRow .= "<td></td>";
         }
+
+        // Description
         if (strlen($description) > 0) {
             $tableBodyRow .= "<td property=\"skos:definition\" lang=\"en\" xml:lang=\"en\" content=\"{$description}\">{$description}</td>";
         } else {
             $tableBodyRow .= "<td></td>";
         }
+
+        // Scope Note        
         if (strlen($scope_note) > 0) {
             $tableBodyRow .= "<td property=\"skos:scopeNote\" lang=\"en\" xml:lang=\"en\" content=\"{$scope_note}\">{$scope_note}</td>";
         } else {
             $tableBodyRow .= "<td></td>";
         }
 
+        // ID (IRI)
         $tableBodyRow .= "<td><a href=\"{$id}\">{$id}</a></td>";
+
+        // Relationships
         if (strlen($close_match) > 0) {
             $tableBodyRow .= "<td rel=\"skos:closeMatch\" resource=\"{$close_match}\">{$close_match_content}</td>";
         } else {
             $tableBodyRow .= "<td></td>";
         }
+
+        // Closely Related Term
         if (strlen($related_term) > 0) {
             $tableBodyRow .= "<td rel=\"skos:closelyRelatedNaturalLanguageTerm\" resource=\"{$related_term}\"><a href=\"{$related_term}\" target=\"_blank\">{$related_term}</a></td>";
         } else {
             $tableBodyRow .= "<td></td>";
         }
 
+        // Vocabulary
         $tableBodyRow .= <<<EOT
             <td rel="skos:inScheme" resource="{$url}">
                 <a href="{$url}">{$url}</a>
@@ -164,24 +176,29 @@ EOT;
         $scope_note = isset($term['scopeNote']) ? $term['scopeNote']['en'] : '';
         $tr_class = isset($term['reference']) && $term['reference'] ? 'warning' : '';
         $vocabularyIRI = isset($term['inScheme']) ? $term['inScheme'] : '';
+        
+        // Label & Description
         $tableBodyRow = <<<EOT
         <tbody resource="{$id}" id="{$anchorId}">
             <tr class="{$tr_class}">
             <td>{$prefLabel}</td>
             <td> </td>
 EOT;
+
+        // Scope Note
         if (strlen($scope_note) > 0) {
             $tableBodyRow .= "<td property=\"skos:scopeNote\" lang=\"en\" xml:lang=\"en\" content=\"{$scope_note}\">{$scope_note}</td>";
         } else {
             $tableBodyRow .= "<td></td>";
         }
+
+        // ID (IRI)
         $tableBodyRow .= "<td><a href=\"{$id}\">{$id}</a></td>";
+
+        // Relationships & Closely Related Term
         $tableBodyRow .= "<td> </td><td> </td>";
-        if (strlen($scope_note) > 0) {
-            $tableBodyRow .= "<td property=\"skos:scopeNote\" lang=\"en\" xml:lang=\"en\" content=\"{$scope_note}\">{$scope_note}</td>";
-        } else {
-            $tableBodyRow .= "<td></td>";
-        }
+
+        // Vocabulary
         if (strlen($vocabularyIRI) > 0) {
             $tableBodyRow .= "<td rel=\"skos:referencedBy\" resource=\"{$url}\"><a href=\"{$vocabularyIRI}\">{$vocabularyIRI}</a></td>";
         } else {
@@ -235,7 +252,7 @@ EOT;
 
         $content = '';
         $content .= $this->generateTable($verbs, $url, 'Verbs', 'Verb', 'info');
-        $content .= $this->generateTable($activities, $url, 'Activity Types', 'Activity Type', 'danger');
+        $content .= $this->generateTable($activities, $url, 'Activity Types', 'ActivityType', 'danger');
         $content .= $this->generateTable($extensions, $url, 'Extensions', 'Extension', 'success');
 
         $page=<<<EOT
