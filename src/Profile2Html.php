@@ -17,11 +17,25 @@ class Profile2Html
 
         $title = $profile['prefLabel']['en'];
 
-        $verbs = $profile['verbs'];
-        $activities = $profile['activity-types'];
-        $extensions = $profile['extensions'];
 
-        $references = $profile['references'];
+        $verbs = array();
+        $activities = array();
+        $extensions = array();
+        $references = array();
+
+        if(isset($profile['verbs']))
+            $verbs = $profile['verbs'];
+
+        if(isset($profile['activity-types']))
+            $activities = $profile['activity-types'];
+
+        if(isset($profile['extensions']))
+            $extensions = $profile['extensions'];
+
+        if(isset($profile['references']))
+            $references = $profile['references'];
+
+
         $url = $profile['@id'];
 
         foreach ($references as $reference) {
@@ -246,14 +260,20 @@ EOT;
     {
 
         $navbar = '';
-        $navbar .= $this->generateDropdown($verbs, $url, 'Verbs');
-        $navbar .= $this->generateDropdown($activities, $url, 'Activity Types');
-        $navbar .= $this->generateDropdown($extensions, $url, 'Extensions');
+        if(sizeof($verbs) > 0)
+            $navbar .= $this->generateDropdown($verbs, $url, 'Verbs');
+        if(sizeof($activities) > 0)
+            $navbar .= $this->generateDropdown($activities, $url, 'Activity Types');
+        if(sizeof($extensions) > 0)
+            $navbar .= $this->generateDropdown($extensions, $url, 'Extensions');
 
         $content = '';
-        $content .= $this->generateTable($verbs, $url, 'Verbs', 'Verb', 'info');
-        $content .= $this->generateTable($activities, $url, 'Activity Types', 'ActivityType', 'danger');
-        $content .= $this->generateTable($extensions, $url, 'Extensions', 'Extension', 'success');
+        if(sizeof($verbs) > 0)
+            $content .= $this->generateTable($verbs, $url, 'Verbs', 'Verb', 'info');
+        if(sizeof($activities) > 0)
+            $content .= $this->generateTable($activities, $url, 'Activity Types', 'Activity Type', 'danger');
+        if(sizeof($extensions) > 0)
+            $content .= $this->generateTable($extensions, $url, 'Extensions', 'Extension', 'success');
 
         $page=<<<EOT
         <!DOCTYPE html>
