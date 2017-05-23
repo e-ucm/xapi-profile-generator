@@ -125,8 +125,11 @@ EOT;
     {
         $id = isset($term['@id']) ? $term['@id'] : '';
         $prefLabel = isset($term['prefLabel']) ? $term['prefLabel']['en'] : '';
+        $prefLabel = htmlentities($prefLabel);
         $description = isset($term['definition']) ? $term['definition']['en'] : '';
+        $description = htmlentities($description);
         $scope_note = isset($term['scopeNote']) ? $term['scopeNote']['en'] : '';
+        $scope_note = htmlentities($scope_note);
         $close_match = isset($term['closeMatch']) ? $term['closeMatch']['@id'] : '';
         $close_match_content = '';
         if ($close_match) {
@@ -193,7 +196,9 @@ EOT;
     {
         $id = isset($term['@id']) ? $term['@id'] : '';
         $prefLabel = isset($term['prefLabel']) ? $term['prefLabel']['en'] : '';
+        $prefLabel = htmlentities($prefLabel);
         $scope_note = isset($term['scopeNote']) ? $term['scopeNote']['en'] : '';
+        $scope_note = htmlentities($scope_note);
         $tr_class = isset($term['reference']) && $term['reference'] ? 'warning' : '';
         $vocabularyIRI = isset($term['inScheme']) ? $term['inScheme'] : '';
         
