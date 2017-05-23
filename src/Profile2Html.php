@@ -97,13 +97,11 @@ EOT;
         $tableBody = '';
         foreach ($terms as $term) {
             $id = isset($term['@id']) ? $term['@id'] : '';
+            $anchorId = $this->calculateAnchorId($id);
             $isTermReused = strpos($id, $url) === false;
             if (!$isTermReused) {
-                $anchorId = substr($id, strlen($url)+1);
                 $tableBody .= $this->generateRowForOurTerm($term, $url, $type, $anchorId);
             } else {
-                $idUrl = parse_url($id);
-                $anchorId= $idUrl['host'].$idUrl['path'];
                 $tableBody .= $this->generateRowForReusedTerm($term, $url, $anchorId);
             }
         }
@@ -113,6 +111,14 @@ EOT;
         </div>
 EOT;
         return $tableHeader.$tableBody.$tableFooter;
+    }
+
+    private function calculateAnchorId($id)
+    {
+        $lastBarPos=strrpos($id, '/');
+        if ($lastBarPos !== false) {
+            return substr($id, $lastBarPos+1);
+        }
     }
 
     private function generateRowForOurTerm($term, $url, $type, $anchorId)
@@ -238,13 +244,7 @@ EOT;
         $dropdownBody = '';
         foreach ($terms as $term) {
             $id = $term['@id'];
-            $anchorId = '';
-            if (strpos($id, $url) === false) {
-                $idUrl = parse_url($id);
-                $anchorId= $idUrl['host'].$idUrl['path'];
-            } else {
-                $anchorId = substr($id, strlen($url)+1);
-            }            
+            $anchorId = $this->calculateAnchorId($id);
             $name = $term['prefLabel']['en'];
             $dropdownBody .= "<li><a href=\"#{$anchorId}\">{$name}</a></li>";
         }
