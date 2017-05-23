@@ -97,13 +97,11 @@ EOT;
         $tableBody = '';
         foreach ($terms as $term) {
             $id = isset($term['@id']) ? $term['@id'] : '';
+            $anchorId = $this->calculateAnchorId($id);
             $isTermReused = strpos($id, $url) === false;
             if (!$isTermReused) {
-                $anchorId = substr($id, strlen($url)+1);
                 $tableBody .= $this->generateRowForOurTerm($term, $url, $type, $anchorId);
             } else {
-                $idUrl = parse_url($id);
-                $anchorId= $idUrl['host'].$idUrl['path'];
                 $tableBody .= $this->generateRowForReusedTerm($term, $url, $anchorId);
             }
         }
@@ -115,12 +113,23 @@ EOT;
         return $tableHeader.$tableBody.$tableFooter;
     }
 
+    private function calculateAnchorId($id)
+    {
+        $lastBarPos=strrpos($id, '/');
+        if ($lastBarPos !== false) {
+            return substr($id, $lastBarPos+1);
+        }
+    }
+
     private function generateRowForOurTerm($term, $url, $type, $anchorId)
     {
         $id = isset($term['@id']) ? $term['@id'] : '';
         $prefLabel = isset($term['prefLabel']) ? $term['prefLabel']['en'] : '';
+        $prefLabel = htmlentities($prefLabel);
         $description = isset($term['definition']) ? $term['definition']['en'] : '';
+        $description = htmlentities($description);
         $scope_note = isset($term['scopeNote']) ? $term['scopeNote']['en'] : '';
+        $scope_note = htmlentities($scope_note);
         $close_match = isset($term['closeMatch']) ? $term['closeMatch']['@id'] : '';
         $close_match_content = '';
         if ($close_match) {
@@ -187,7 +196,9 @@ EOT;
     {
         $id = isset($term['@id']) ? $term['@id'] : '';
         $prefLabel = isset($term['prefLabel']) ? $term['prefLabel']['en'] : '';
+        $prefLabel = htmlentities($prefLabel);
         $scope_note = isset($term['scopeNote']) ? $term['scopeNote']['en'] : '';
+        $scope_note = htmlentities($scope_note);
         $tr_class = isset($term['reference']) && $term['reference'] ? 'warning' : '';
         $vocabularyIRI = isset($term['inScheme']) ? $term['inScheme'] : '';
         
@@ -238,13 +249,7 @@ EOT;
         $dropdownBody = '';
         foreach ($terms as $term) {
             $id = $term['@id'];
-            $anchorId = '';
-            if (strpos($id, $url) === false) {
-                $idUrl = parse_url($id);
-                $anchorId= $idUrl['host'].$idUrl['path'];
-            } else {
-                $anchorId = substr($id, strlen($url)+1);
-            }            
+            $anchorId = $this->calculateAnchorId($id);
             $name = $term['prefLabel']['en'];
             $dropdownBody .= "<li><a href=\"#{$anchorId}\">{$name}</a></li>";
         }
@@ -297,7 +302,7 @@ EOT;
                 </div>
                 <!--/.nav-collapse -->
             </div>
-        </div
+        </div>
         <br/>
         <br/>
         <div xmlns="http://www.w3.org/1999/xhtml" class="container-fluid" prefix="
