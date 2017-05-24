@@ -3,7 +3,7 @@
     "description": "HTML generator for xAPI JSON-LD profiles",
     "keywords": ["xapi","profile", "generator"],
     "homepage": "https://github.com/e-ucm/xapi-profile2html",
-    "license": "Apache 2",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Ivan Martinez-Ortiz",
