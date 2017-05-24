@@ -1,0 +1,10 @@
+#!/usr/bin/env php
+<?php
+
+Phar::mapPhar('___PHAR___');
+
+___FILELIST___
+
+es\eucm\xapi\command\Command::main();
+
+__HALT_COMPILER();
