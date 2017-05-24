@@ -18,7 +18,7 @@ class Version
             return self::$pharVersion;
         }
         if (self::$version === null) {
-            $version       = new VersionId('0.4', \dirname(\dirname(__DIR__)));
+            $version       = new VersionId('0.5.0', \dirname(\dirname(__DIR__)));
             self::$version = $version->getVersion();
         }
         return self::$version;
