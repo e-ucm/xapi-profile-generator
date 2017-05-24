@@ -27,5 +27,9 @@
     },
     "autoload": {
         "psr-4": {"es\\eucm\\xapi\\": "src/"}
+    },
+    "require-dev": {
+        "theseer/autoload": "^1.23",
+        "sebastian/version": "^2.0"
     }
 }
